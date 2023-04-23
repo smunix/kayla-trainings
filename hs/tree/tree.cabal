@@ -1,0 +1,36 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           tree
+version:        0.1
+author:         Kayla Salumu
+maintainer:     Kayla Salumu
+build-type:     Simple
+
+library
+  exposed-modules:
+      Lib.Top
+  other-modules:
+      Paths_tree
+  hs-source-dirs:
+      src
+  build-depends:
+      base
+    , pretty-simple
+  default-language: GHC2021
+
+executable tree-run
+  main-is: Top.hs
+  other-modules:
+      Paths_tree
+  hs-source-dirs:
+      app
+  ghc-options: -main-is Top
+  build-depends:
+      base
+    , pretty-simple
+    , tree
+  default-language: GHC2021

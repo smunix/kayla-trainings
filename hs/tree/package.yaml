@@ -1,0 +1,19 @@
+name: tree
+version: 0.1
+author: Kayla Salumu
+
+language: GHC2021
+
+dependencies:
+  - base
+  - pretty-simple
+
+executables:
+  tree-run:
+    main: Top
+    source-dirs: app
+    dependencies:
+      - tree
+
+library:
+  source-dirs: src
