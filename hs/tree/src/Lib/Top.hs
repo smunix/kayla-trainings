@@ -1,6 +1,7 @@
 module Lib.Top where
 
 import Text.Pretty.Simple (pPrint)
+import Prelude hiding (lookup)
 
 {-
 Given a list of things that we can order (meaning that we need a Ord predicate),
@@ -10,32 +11,33 @@ write the elements in a binary Tree like structure such that:
 -}
 
 data Tree where
-  MkNode :: Tree -> Int -> Tree -> Tree
-  MkEmpty :: Tree
+  Empty :: Tree
+  Branch :: Tree -> Int -> Tree -> Tree
   deriving (Show)
 
-t0 :: Tree
-t0 = MkNode (MkNode MkEmpty 5 MkEmpty) 6 (MkNode MkEmpty 8 MkEmpty)
+t0 = Empty
+t1 = Branch t0 2 t0
+t2 = foldr add Empty [5, 2, 4, 10, 9, 19, 3, 15, 11, 14, 17]
 
-t10 = insert 10 t0
+add :: Int -> Tree -> Tree
+add i Empty = Branch Empty i Empty
+add i (Branch l j r)
+  | i < j = Branch (add i l) j r
+  | i > j = Branch l j (add i r)
+  | otherwise = Branch l j r
 
-t6 = insert 6 t10
-
-insert :: Int -> Tree -> Tree
-insert x MkEmpty = MkNode MkEmpty x MkEmpty
-insert x (MkNode left y right)
-  | x < y = MkNode (insert x left) y right
-  | x > y = MkNode left y (insert x right)
-  | x == y = MkNode left y right
-
+lookup :: Int -> Tree -> Bool
+lookup i Empty = False
+lookup i (Branch l j r)
+  | i == j = True
+  | i > j = lookup i r
+  | i < j = lookup i l
 main :: IO ()
 main = do
   pPrint "Hello, People!"
-  pPrint MkEmpty
-  pPrint [MkEmpty, MkEmpty, MkEmpty]
-  pPrint (MkNode MkEmpty 6 MkEmpty)
   pPrint t0
-  pPrint t10
-  pPrint t6
+  pPrint t1
+  pPrint t2
 
-  pPrint (foldr insert t6 [5, 7, 3, 55, 6, 4, 2, 0, 19, 7, 8, 19])
+  pPrint (lookup 100 t2)
+  pPrint (lookup 14 t2)
